@@ -88,7 +88,7 @@
   <div class="page" id="page5">
     <h2>Пополнение баланса</h2>
     <input type="number" id="cryptoAmount" placeholder="Сумма в USDT" style="width:100%; padding:12px; border-radius:10px; border:none; margin-top:10px; text-align:center;">
-    <button class="btn" onclick="handleCryptoPay()">Пополнить</button>
+    <button id="payButton">Пополнить</button>
     <div class="note">
       Платеж безопасно переводится на криптокошелек. Пользователю не нужен свой кошелек.
     </div>
@@ -165,22 +165,29 @@
   }
 
   /* Crypto Payment */
-  async function handleCryptoPay(){
-    const amount = parseFloat(document.getElementById('cryptoAmount').value);
-    if(!amount || amount<=0){ alert('Введите корректную сумму'); return; }
-    try{
-      const res = await fetch('/api/create-payment',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({ amount, currency:'USDT' })
-      });
-      if(!res.ok) throw new Error('Ошибка создания платежа');
-      const data = await res.json();
-      if(!data.paymentUrl) throw new Error('Платёжная ссылка не получена');
-      window.location.href = data.paymentUrl;
-    } catch(err){ alert(err.message); }
-  }
+  const button = document.getElementById('payButton');
+
+    button.addEventListener('click', async () => {
+      try {
+        const res = await fetch('/api/create-payment', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ amount: 100, currency: 'USDT' })
+        });
+    
+        const data = await res.json();
+        if (data.paymentUrl) {
+          window.location.href = data.paymentUrl;
+        } else {
+          alert('Ошибка создания платежа: ' + (data.error || 'Unknown'));
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Ошибка при запросе к серверу');
+      }
+    });
 </script>
 
 </body>
 </html>
+
