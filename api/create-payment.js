@@ -13,12 +13,12 @@ export default async function handler(req, res) {
 
     const payload = {
       price_amount: amount,
-      price_currency: currency,
-      pay_currency: currency,
+      price_currency: 'USDT',
+      pay_currency: 'USDT',
       order_id: 'order_' + Date.now(),
       order_description: 'Пополнение баланса',
-      ipn_callback_url: 'https://jyldammoney.vercel.app/api/webhook', // webhook endpoint
-      success_url: 'https://jyldammoney.vercel.app/success'           // страница после успешной оплаты
+      ipn_callback_url: 'https://jyldammoney.vercel.app/api/webhook',
+      success_url: 'https://jyldammoney.vercel.app/success'
     };
 
     const response = await fetch('https://api.nowpayments.io/v1/invoice', {
