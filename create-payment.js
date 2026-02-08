@@ -12,8 +12,8 @@ export default async function handler(req, res) {
     pay_currency: currency,
     order_id: 'order_' + Date.now(),
     order_description: 'Пополнение баланса',
-    ipn_callback_url: 'https://твой-сайт.vercel.app/api/webhook',
-    success_url: 'https://твой-сайт.vercel.app/success',
+    ipn_callback_url: 'https://jyldammoney.vercel.app/webhook',
+    success_url: 'https://jyldammoney.vercel.app/',
   };
 
   try {
